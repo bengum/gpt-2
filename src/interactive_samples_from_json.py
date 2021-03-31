@@ -6,6 +6,7 @@ import os
 import numpy as np
 import tensorflow as tf
 from itertools import cycle
+import re
 
 import model, sample, encoder
 
@@ -20,6 +21,10 @@ def interact_model(
     top_p=1,
     models_dir='models',
     context_file=None,
+    include_prefix=True,
+    prefix='<|startoftext|>',
+    truncate='<|endoftext|>',
+
 ):
     """
     Interactively run the model
@@ -46,6 +51,9 @@ def interact_model(
       {'context': 'more words words words'}, 
       ...
      ]
+    :include_prefix : to do
+    :prefix : to do, usually <|startoftext|>
+    :truncate : to do
     """
     models_dir = os.path.expanduser(os.path.expandvars(models_dir))
     if batch_size is None:
@@ -98,9 +106,25 @@ def interact_model(
             })[:, len(context_tokens):]
             for i in range(batch_size):
                 generated += 1
-                text = enc.decode(out[i])
+                gen_text = enc.decode(out[i])
                 print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
-                print(text)
+                # print only between tags
+                if prefix:
+                    gen_text = enc.decode(context_tokens[:1]) + gen_text
+                if truncate:
+                    truncate_esc = re.escape(truncate)
+                    if prefix and not include_prefix:
+                        prefix_esc = re.escape(prefix)
+                        pattern = '(?:{})(.*?)(?:{})'.format(prefix_esc,
+                                                            truncate_esc)
+                    else:
+                        pattern = '(.*?)(?:{})'.format(truncate_esc)
+
+                    trunc_text = re.search(pattern, gen_text, re.S)
+                    if trunc_text:
+                        gen_text = trunc_text.group(1)
+
+                print(gen_text)
         print("=" * 80)
 
 if __name__ == '__main__':
