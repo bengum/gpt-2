@@ -1,3 +1,10 @@
+Fork for working with context via json files. I'm a noob and probably can't help you much. Original GPT-2 info below.
+
+Credits:
+[OpenAI](https://openai.com/blog/better-language-models/) team for the real big stuff
+[Max Woolf](http://minimaxir.com) for gpt-2-simple 
+
+
 **Status:** Archive (code is provided as-is, no updates expected)
 
 # gpt-2
