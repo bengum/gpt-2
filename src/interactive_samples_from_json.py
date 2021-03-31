@@ -10,7 +10,7 @@ import re
 
 import model, sample, encoder
 
-def interact_model(
+def interact_model_from_json(
     model_name='124M',
     seed=None,
     nsamples=1,
