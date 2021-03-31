@@ -2,6 +2,7 @@ Fork for working with context via json files. I'm a noob and probably can't help
 
 Credits:
 [OpenAI](https://openai.com/blog/better-language-models/) team for the real big stuff
+
 [Max Woolf](http://minimaxir.com) for gpt-2-simple 
 
 
