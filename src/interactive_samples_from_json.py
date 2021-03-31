@@ -124,9 +124,9 @@ def interact_model_from_json(
                     if trunc_text:
                         gen_text = trunc_text.group(1)
 
-                print(gen_text)
+                print(context_tokens, '\n', gen_text)
         print("=" * 80)
 
 if __name__ == '__main__':
-    fire.Fire(interact_model)
+    fire.Fire(interact_model_from_json)
 
