@@ -24,7 +24,7 @@ def interact_model_from_json(
     include_prefix=True,
     prefix='<|startoftext|>',
     truncate='<|endoftext|>',
-
+    output_file=None
 ):
     """
     Interactively run the model
@@ -48,12 +48,14 @@ def interact_model_from_json(
     :context_file : Path to json file containing context for each nsample. Will
      cycle through each item in file in format 
      [{'context': 'words words words'},
-      {'context': 'more words words words'}, 
+      {'context': 'more words words words'}]
+    
       ...
      ]
     :include_prefix : to do
     :prefix : to do, usually <|startoftext|>
     :truncate : to do
+    :output_file : Path to json file to hold results
     """
     models_dir = os.path.expanduser(os.path.expandvars(models_dir))
     if batch_size is None:
@@ -100,8 +102,10 @@ def interact_model_from_json(
         #     print('Prompt should not be empty!')
         #     raw_text = input("Model prompt >>> ")
         # context_tokens = enc.encode(raw_text)
+        
+        output_list = []
         generated = 0
-        for _ in range(nsamples // batch_size):
+        for n in range(nsamples // batch_size):
             # Use the first value in the dict, endlessly cycling through list
             context_item = list(next(context_cycle).values())[0]
             context_tokens = enc.encode(context_item)
@@ -129,7 +133,14 @@ def interact_model_from_json(
                         gen_text = trunc_text.group(1)
                 # Need to output to file in addition to printing
                 print(context_item, gen_text)
+                output_list.append({'text': gen_text, 
+                                    'context': context_item,
+                                    'index': n})
         print("=" * 80)
+
+        if output_file:
+            with open(output_file, 'w', encoding='utf-8') as w:
+                json.dump(output_list, w)
 
 if __name__ == '__main__':
     fire.Fire(interact_model_from_json)
