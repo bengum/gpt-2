@@ -70,8 +70,12 @@ def interact_model_from_json(
     elif length > hparams.n_ctx:
         raise ValueError("Can't get samples longer than window size: %s" % hparams.n_ctx)
 
-    with open(context_file, 'r', encoding='utf-8') as r:
-        context_list = json.load(r)
+    if context_file:
+        with open(context_file, 'r', encoding='utf-8') as r:
+            context_list = json.load(r)
+    else:
+        context_list = [' ']
+    context_cycle = cycle(context_list)
     
 
     with tf.Session(graph=tf.Graph()) as sess:
@@ -89,7 +93,7 @@ def interact_model_from_json(
         ckpt = tf.train.latest_checkpoint(os.path.join(models_dir, model_name))
         saver.restore(sess, ckpt)
 
-        context_cycle = cycle(context_list)
+        
 
         # raw_text = input("Model prompt >>> ")
         # while not raw_text:
@@ -123,8 +127,8 @@ def interact_model_from_json(
                     trunc_text = re.search(pattern, gen_text, re.S)
                     if trunc_text:
                         gen_text = trunc_text.group(1)
-
-                print(context_tokens, '\n', gen_text)
+                # Need to output to file in addition to printing
+                print(context_item, gen_text)
         print("=" * 80)
 
 if __name__ == '__main__':
