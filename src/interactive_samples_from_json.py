@@ -48,9 +48,8 @@ def interact_model_from_json(
     :context_file : Path to json file containing context for each nsample. Will
      cycle through each item in file in format 
      [{'context': 'words words words'},
-      {'context': 'more words words words'}]
-    
-      ...
+      {'context': 'more words words words'}
+        ...
      ]
     :include_prefix : to do
     :prefix : to do, usually <|startoftext|>
