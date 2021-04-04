@@ -106,7 +106,7 @@ def interact_model_from_json(
         generated = 0
         for n in range(nsamples // batch_size):
             # Use the first value in the dict, endlessly cycling through list
-            context_item = list(next(context_cycle).values())[0]
+            context_item = list(next(context_cycle)['context']
             context_tokens = enc.encode(context_item)
             out = sess.run(output, feed_dict={
                 context: [context_tokens for _ in range(batch_size)]
@@ -133,7 +133,7 @@ def interact_model_from_json(
                 # Need to output to file in addition to printing
                 print(context_item, gen_text)
                 output_list.append({'text': gen_text, 
-                                    'context': context_item,
+                                    'input_context': context_item,
                                     'index': n})
         print("=" * 80)
 
