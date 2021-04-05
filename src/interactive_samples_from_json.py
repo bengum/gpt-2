@@ -117,7 +117,7 @@ def interact_model_from_json(
                 print("=" * 40 + " SAMPLE " + str(generated) + " " + "=" * 40)
                 # print only between tags
                 if prefix:
-                    gen_text = enc.decode(context_tokens[:1]) + gen_text
+                    gen_text = enc.decode(context_tokens) + gen_text
                 if truncate:
                     truncate_esc = re.escape(truncate)
                     if prefix and not include_prefix:
